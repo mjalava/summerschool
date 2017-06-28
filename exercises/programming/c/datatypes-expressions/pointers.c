@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
    // Evaluate expressions using both the original and the pointer variable
    // and investigate the value / value pointed to
 
+   // This exercise was done in the expressions.c file
 
    return 0;
 }

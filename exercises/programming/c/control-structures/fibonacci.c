@@ -20,10 +20,14 @@ int main(int argc, char *argv[])
 	 {
 	   printf("%d\n",f2);
 	 }
+       else
+	 {
+	   break;
+	 }
        f0 = f1;
        f1 = f2;
      }
-   while(f2 < 100);
+   while(1);
 
    return 0;
 }

@@ -5,6 +5,7 @@
 #include <string.h>
 #include <assert.h>
 #include <mpi.h>
+#include <omp.h>
 
 #include "heat.h"
 
@@ -46,6 +47,7 @@ void evolve(field *curr, field *prev, double a, double dt)
      * are not updated. */
     dx2 = prev->dx * prev->dx;
     dy2 = prev->dy * prev->dy;
+#pragma omp parallel for private(i,j)
     for (i = 1; i < curr->nx + 1; i++) {
         for (j = 1; j < curr->ny + 1; j++) {
             curr->data[i][j] = prev->data[i][j] + a * dt *

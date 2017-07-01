@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-    int i, myid, ntasks;
+  int i, myid, ntasks, count;
     int size = 10000000;
     int *message;
     int *receiveBuffer;
@@ -39,11 +39,13 @@ int main(int argc, char *argv[])
       left =  MPI_PROC_NULL;
       MPI_Sendrecv(message,size,MPI_INT,right,0,receiveBuffer,size,MPI_INT,left,0,MPI_COMM_WORLD,&status);
 
+      MPI_Get_count(&status,MPI_INT,&count);
+
         printf("Sender: %d. Sent elements: %d. Tag: %d. Receiver: %d\n",
                myid, size, 0, right);
 
-        printf("Receiver: %d. first element %d.\n",
-               myid, receiveBuffer[0]);
+        printf("Receiver: %d. first element %d. count %d.\n",
+               myid, receiveBuffer[0],count);
     
 
     /* TODO end */

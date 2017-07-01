@@ -1,0 +1,37 @@
+Sender: 0. Sent elements: 10000000. Tag: 0. Receiver: 1
+Receiver: 0. first element 0.
+Sender: 11. Sent elements: 10000000. Tag: 0. Receiver: -1
+Receiver: 11. first element 10.
+Sender: 1. Sent elements: 10000000. Tag: 0. Receiver: 2
+Receiver: 1. first element 0.
+Sender: 5. Sent elements: 10000000. Tag: 0. Receiver: 6
+Receiver: 5. first element 4.
+Sender: 6. Sent elements: 10000000. Tag: 0. Receiver: 7
+Receiver: 6. first element 5.
+Sender: 2. Sent elements: 10000000. Tag: 0. Receiver: 3
+Receiver: 2. first element 1.
+Sender: 3. Sent elements: 10000000. Tag: 0. Receiver: 4
+Sender: 4. Sent elements: 10000000. Tag: 0. Receiver: 5
+Receiver: 3. first element 2.
+Receiver: 4. first element 3.
+Sender: 7. Sent elements: 10000000. Tag: 0. Receiver: 8
+Receiver: 7. first element 6.
+Sender: 10. Sent elements: 10000000. Tag: 0. Receiver: 11
+Receiver: 10. first element 9.
+Sender: 9. Sent elements: 10000000. Tag: 0. Receiver: 10
+Sender: 8. Sent elements: 10000000. Tag: 0. Receiver: 9
+Receiver: 9. first element 8.
+Receiver: 8. first element 7.
+Time elapsed in rank  4:  0.035
+Time elapsed in rank 10:  0.036
+Time elapsed in rank  9:  0.036
+Time elapsed in rank  7:  0.036
+Time elapsed in rank  5:  0.035
+Time elapsed in rank  8:  0.036
+Time elapsed in rank  6:  0.035
+Time elapsed in rank  2:  0.035
+Time elapsed in rank  1:  0.035
+Time elapsed in rank 11:  0.034
+Time elapsed in rank  3:  0.035
+Time elapsed in rank  0:  0.033
+Application 5976102 resources: utime ~0s, stime ~1s, Rss ~81892, inblocks ~9004, outblocks ~19137

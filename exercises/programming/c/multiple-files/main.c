@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "dynamic_array.h"
+#include "pngwriter.h"
+#include <png.h>
 
 int main(int argc, char *argv[])
 {
 
-    int nx, ny;
+  int nx, ny, error_msg;
     field temperature,laplacian;
 
     int i;
@@ -27,13 +29,11 @@ int main(int argc, char *argv[])
     init_field(&laplacian);
     init_temp(&temperature,20.0,70.0,5.0,85.0);
     init_lapl(&laplacian);
+    gen_laplacian(&laplacian,&temperature);
 
-      // Initialize field and print out the result
-      //    init_field(&temperature, nx, ny);
-      //print_field(&temperature);
-	
-	// Free memory allocation
-	// TODO: Free memory allocations
+
+    error_msg =  save_png(laplacian.data[0], laplacian.ny, laplacian.nx, "output.png", 'c');
+
 
     return 0;
 }

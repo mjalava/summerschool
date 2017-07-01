@@ -1,0 +1,22 @@
+#include <stdio.h>
+
+int main()
+{
+  int a = 1;
+
+  switch(a)
+    {
+    case a < 0:
+      printf("negative\n");
+      break;
+    case a == 0:
+      printf("zero\n");
+      break;
+    case a >100:
+      printf("negative\n");
+      break;
+    default:
+      printf("none of the alternatives\n");
+    }
+}
+

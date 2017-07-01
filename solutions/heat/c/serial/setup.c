@@ -23,8 +23,8 @@ void initialize(int argc, char* argv[], field *current,
      */
 
 
-    int rows = 200;             //!< Field dimensions with default values
-    int cols = 200;
+    int rows = 1024;             //!< Field dimensions with default values
+    int cols = 1024;
 
     char input_file[64];        //!< Name of the optional input file
 
@@ -83,11 +83,13 @@ void generate_field(field *temperature)
 
     /* Allocate the temperature array, note that
      * we have to allocate also the ghost layers */
+#pragma omp single
     temperature->data =
         malloc_2d(temperature->nx + 2, temperature->ny + 2);
 
     /* Radius of the source disc */
     radius = temperature->nx / 6.0;
+#pragma omp for private(i,j, dx, dy)
     for (i = 0; i < temperature->nx + 2; i++) {
         for (j = 0; j < temperature->ny + 2; j++) {
             /* Distances of point i, j from the origin */

@@ -1,0 +1,13 @@
+CC=gcc
+
+OBJS=main.o laplacian.o init_temp.o init_field.o init_lapl.o pngwriter.o
+
+main.o: main.c dynamic_array.h
+laplacian.o: laplacian.c dynamic_array.h
+init_temp.o: init_temp.c dynamic_array.h
+init_field.o: init_field.c dynamic_array.h
+init_lapl.o: init_lapl.c dynamic_array.h
+pngwriter.o: pngwriter.c
+
+test: $(OBJS) 
+	$(CC) -lpng -o test $(OBJS)

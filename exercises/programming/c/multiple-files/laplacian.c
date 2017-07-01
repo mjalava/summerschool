@@ -3,24 +3,23 @@
 #include "pngwriter.h"
 #include "dynamic_array.h"
 
-void laplacian(field *f)
+void gen_laplacian(field *lf,field *tf)
 {
-  int i, j, error_code;
+  int i, j;
   int nx, ny;
-  field laplacian;
 
-  nx = f->nx + 2;
-  ny = f->ny +2;
+  nx = tf->nx;
+  ny = tf->ny;
 
 
-  for(i = 1; i < nx - 1; i++)
+  for(i = 1; i <= nx - 1; i++)
     {
-    for(j = 1; j < ny - 1; j++)
+    for(j = 1; j <= ny - 1; j++)
       {
-	f->data[i][j] = (f->data[i-1][j] - 2 * f->data[i][j] + f->data[i+1][j]) / f->dx2 + (f->data[i][j-1] - 2 * f->data[i][j] + f->data[i][j+1]) / f->dy2;
+	printf("%d %d\n",i,j);
+	lf->data[i][j] = (tf->data[i-1][j] - 2 * tf->data[i][j] + tf->data[i+1][j]) / tf->dx2 + (tf->data[i][j-1] - 2 * tf->data[i][j] + tf->data[i][j+1]) / tf->dy2;
       }
 
-
-
-    
+    }
 }
+

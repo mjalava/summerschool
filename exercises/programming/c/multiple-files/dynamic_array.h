@@ -20,8 +20,9 @@ typedef struct {
 void init_field(field * f);
 
 void init_temp(field * f, float x0, float xmax, float y0, float ymax);
+void init_lapl(field * f);
 
-void laplacian(field * f);
+void gen_laplacian(field *lf,field * tf);
 
 void print_field(field * f);
 

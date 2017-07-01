@@ -1,0 +1,11 @@
+EXE=test
+CC=cc
+
+main.o: main.c
+laplacian.o: laplacian.c dynamic_array.h
+init_temp.o: init_temp.c dynamic_array.h
+init_field.o: init_field.c dynamic_array.h
+
+
+$(EXE): $(OBJS)
+	$(CC) -o $(EXE) $(OBJS)

@@ -27,9 +27,12 @@ int main(int argc, char *argv[])
     /* TODO: */
     /* Send and receive messages as defined in exercise */
     if (myid == 0) {
-
+      MPI_Send(message,100,MPI_INT,1,0,MPI_COMM_WORLD);
+      MPI_Recv(receiveBuffer,100,MPI_INT,1,0,MPI_COMM_WORLD,&status);
         printf("Rank %i received %i\n", myid, receiveBuffer[0]);
     } else if (myid == 1) {
+      MPI_Recv(receiveBuffer,100,MPI_INT,0,0,MPI_COMM_WORLD,&status);
+      MPI_Send(message,100,MPI_INT,0,0,MPI_COMM_WORLD);
 
         printf("Rank %i received %i\n", myid, receiveBuffer[0]);
     }

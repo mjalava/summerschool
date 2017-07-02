@@ -1,0 +1,44 @@
+COMP=cray
+
+COMMONDIR=../../common
+
+ifeq ($(COMP),cray)
+CC=cc
+CCFLAGS=-O3 -I/appl/opt/libpng/include -I$(COMMONDIR)
+LDFLAGS=-L/appl/opt/libpng/lib
+LIBS=-lpng -lz
+endif
+
+ifeq ($(COMP),gnu)
+CC=mpicc
+CCFLAGS=-O3 -Wall -I$(COMMONDIR)
+LDFLAGS=
+LIBS=-lpng
+endif
+
+EXE=heat_mpi_nonblock
+OBJS=core_nonblock.o setup_nonblock.o utilities_nonblock.o io_nonblock.o main_nonblock.o
+OBJS_PNG=$(COMMONDIR)/pngwriter.o
+
+
+all: $(EXE)
+
+$(COMMONDIR)/pngwriter.o: $(COMMONDIR)/pngwriter.c $(COMMONDIR)/pngwriter.h
+core_nonblock.o: core_nonblock.c heat_nonblock.h
+utilities.o: utilities_nonblock.c heat_nonblock.h
+setup.o: setup.c heat_nonblock.h
+io.o: io_nonblock.c heat_nonblock.h
+main_nonblock.o: main_nonblock.c heat_nonblock.h
+
+$(OBJS_PNG): C_COMPILER := $(CC)
+$(OBJS): C_COMPILER := $(CC)
+
+$(EXE): $(OBJS) $(OBJS_PNG)
+	$(CC) $(CCFLAGS) $(OBJS) $(OBJS_PNG) -o $@ $(LDFLAGS) $(LIBS)
+
+%.o: %.c
+	$(C_COMPILER) $(CCFLAGS) -c $< -o $@
+
+.PHONY: clean
+clean:
+	-/bin/rm -f $(EXE) a.out *.o *.png *~

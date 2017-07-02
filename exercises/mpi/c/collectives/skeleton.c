@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     /* TODO: use a single collective communication call (and maybe prepare
      *       some parameters for the call) */
 
-    int i = 3; // 1=exercise a, 2=b etc.
+    int i = 4; // 1=exercise a, 2=b etc.
     int sendcounts[4] = {1,1,2,4};
     int displs[4] = {0,1,2,4};
 
@@ -58,6 +58,9 @@ int main(int argc, char *argv[])
       case 3:
 	MPI_Gatherv(sendbuf,sendcounts[rank],MPI_INT,recvbuf,sendcounts,displs,
 		    MPI_INT,1,MPI_COMM_WORLD);
+	break;
+      case 4:
+	MPI_Alltoall(sendbuf,2,MPI_INT,recvbuf,2,MPI_INT,MPI_COMM_WORLD);
 	break;
       }
     

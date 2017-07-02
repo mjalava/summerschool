@@ -10,16 +10,18 @@ void init_buffers(int *sendbuffer, int *recvbuffer, int buffersize);
 
 int main(int argc, char *argv[])
 {
-    int ntasks, rank, color;
-    int sendbuf[2 * NTASKS], recvbuf[2 * NTASKS];
+  int ntasks, rank;
+  int sendbuf[2 * NTASKS], recvbuf[2 * NTASKS];
     int printbuf[2 * NTASKS * NTASKS];
+    int *sp = sendbuf;
+    int *rp = recvbuf;
 
     MPI_Comm sub_comm;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &ntasks);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
+    
     if (ntasks != NTASKS) {
         if (rank == 0) {
             fprintf(stderr, "Run this program with %i tasks.\n", NTASKS);
@@ -36,10 +38,12 @@ int main(int argc, char *argv[])
     /* TODO: use a single collective communication call (and maybe prepare
      *       some parameters for the call) */
 
-    int i = 4; // 1=exercise a, 2=b etc.
+    int i = 6; // 1=exercise a, 2=b etc.
     int sendcounts[4] = {1,1,2,4};
     int displs[4] = {0,1,2,4};
-
+    int color[4] = {1,1,2,2};
+    MPI_Comm subcomm;
+    
     switch(i)
       {
       case 0:
@@ -61,8 +65,20 @@ int main(int argc, char *argv[])
 	break;
       case 4:
 	MPI_Alltoall(sendbuf,2,MPI_INT,recvbuf,2,MPI_INT,MPI_COMM_WORLD);
+
 	break;
+      case 5:
+	MPI_Gatherv(sendbuf+displs[rank],sendcounts[rank],MPI_INT,recvbuf,sendcounts,displs,
+		    MPI_INT,1,MPI_COMM_WORLD);
+	break;
+      case 6:
+	MPI_Comm_split(MPI_COMM_WORLD,color[rank],rank,&subcomm);
+
+	MPI_Reduce(sendbuf,recvbuf,8,MPI_INT,MPI_SUM,0,subcomm);
+	break;
+
       }
+
     
     
     /* Print data that was received */

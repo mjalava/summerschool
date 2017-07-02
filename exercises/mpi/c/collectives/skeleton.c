@@ -36,14 +36,24 @@ int main(int argc, char *argv[])
     /* TODO: use a single collective communication call (and maybe prepare
      *       some parameters for the call) */
 
-    
+    int i = 2; // 1=exercise a, 2=b etc.
+
+    switch(i)
+      {
+      case 1:
+   
 
     if(rank == 0)
       for(int i = 0; i < 2*NTASKS; i++)
 	recvbuf[i] = sendbuf[i];
-
     MPI_Bcast(recvbuf,2*NTASKS,MPI_INT,0,MPI_COMM_WORLD);
+    break;
 
+      case 2:
+	MPI_Scatter(sendbuf,2,MPI_INT,recvbuf,2,MPI_INT,0,MPI_COMM_WORLD);
+	break;
+      }
+    
     /* Print data that was received */
     /* TODO: add correct buffer */
     print_buffers(printbuf, recvbuf , 2 * NTASKS);

@@ -36,9 +36,13 @@ int main(int argc, char *argv[])
      You can use MPI_Get_address to compute offsets.
   */
 
-  disp[0] = &particles[0].coords[0] - &particles[0];
-  disp[1] = &particles[0].charge - &particles[0];
-  disp[2] = &particles[0].label[0] - &particles[0];
+  MPI_Get_address(&particles[0].coords[0],&disp[0]);
+  MPI_Get_address(&particles[0].charge,&disp[1]);
+  MPI_Get_address(&particles[0].label[0],&disp[2]);
+
+  disp[1] -= disp[0];
+  disp[2] -= disp[0];
+  disp[0] = 0;
 
   MPI_Type_create_struct(cnt,blocklens,disp,types,&particletype);
   MPI_Type_commit(&particletype);
@@ -54,6 +58,7 @@ int main(int argc, char *argv[])
   dist[1] = (MPI_Aint)&particles[1];
 
   if ( extent != (dist[1]-dist[0])) {
+    printf("Fixing extent!\n");
     /*TODO (c), resize particle type to correct extent */
     MPI_Type_create_resized(particletype,lb,extent,&temptype);
     particletype = temptype;

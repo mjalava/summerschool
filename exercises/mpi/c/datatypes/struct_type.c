@@ -15,6 +15,8 @@ int main(int argc, char *argv[])
   particle particles[n];
   int i, j, myid, ntasks, blocklen[cnt];
   MPI_Datatype particletype, temptype;
+  MPI_Datatype types[3] = {MPI_FLOAT,MPI_INT,MPI_CHAR};
+  int blocklens[3] = {3,1,2};
   MPI_Aint disp[cnt], dist[2], lb, extent;
   double t1, t2;
 
@@ -34,14 +36,28 @@ int main(int argc, char *argv[])
      You can use MPI_Get_address to compute offsets.
   */
 
+  disp[0] = &particles[0].coords[0] - &particles[0];
+  disp[1] = &particles[0].charge - &particles[0];
+  disp[2] = &particles[0].label[0] - &particles[0];
+
+  MPI_Type_create_struct(cnt,blocklens,disp,types,&particletype);
+  MPI_Type_commit(&particletype);
+
   /* TODO (c): check extent (not really necessary on most platforms) That is,
    * check that extent is identical to the distance between two consequtive
    * structs in an array
    * Tip, use MPI_Type_get_extent and  MPI_Get_address
    */
-  
+
+  MPI_Type_get_extent(particletype,&lb,&extent);
+  dist[0] = (MPI_Aint)&particles[0];
+  dist[1] = (MPI_Aint)&particles[1];
+
   if ( extent != (dist[1]-dist[0])) {
     /*TODO (c), resize particle type to correct extent */
+    MPI_Type_create_resized(particletype,lb,extent,&temptype);
+    particletype = temptype;
+    MPI_Type_free(&temptype);
   } 
 
   /* communicate using the created particletype */
@@ -62,6 +78,7 @@ int main(int argc, char *argv[])
          particles[n-1].coords[2]);
   
   //TODO: Free datatype
+  MPI_Type_free(&particletype);
 
   MPI_Finalize();
   return 0;

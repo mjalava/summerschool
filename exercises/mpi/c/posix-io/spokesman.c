@@ -64,7 +64,6 @@ void single_writer(int my_id, int *localvector, int localsize)
 
     for(i = 0; i < ntasks; i++)
       {
-	printf("%d\n",i);
 	if(i != WRITER_ID && my_id == WRITER_ID)
 	  MPI_Recv(fullvector + i * localsize,localsize,MPI_INT,i,99,
 		   MPI_COMM_WORLD,MPI_STATUS_IGNORE);
@@ -80,7 +79,7 @@ void single_writer(int my_id, int *localvector, int localsize)
 	fp = fopen(fname,"w");
 	for(i = 0; i < DATASIZE; i++)
 	  {
-	    fprintf(fp,"%d %d\n",i,fullvector[i]);
+	    fprintf(fp,"%d\n",fullvector[i]);
 	  }
       }
 

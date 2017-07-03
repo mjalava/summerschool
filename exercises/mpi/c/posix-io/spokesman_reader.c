@@ -64,12 +64,12 @@ void single_reader(int my_id, int *localvector, int localsize)
 	fp = fopen(fname,"r");
 	for(i = 0; i < DATASIZE; i++)
 	  {
-	    fscanf(fp,"%d\n",i,&fullvector[i]);
+	    fscanf(fp,"%d\n",&fullvector[i]);
 	    printf("Read in %d\n",fullvector[i]);
 	  }
 
-	for(i = WRITER_ID*localsize; i < (WRITER_ID+1)*localsize; i++)
-	  localvector[i] = fullvector[WRITER_ID*localsize+1];
+	for(i = 0; i < localsize; i++)
+	  localvector[i] = fullvector[WRITER_ID*localsize+i];
       }
 
 

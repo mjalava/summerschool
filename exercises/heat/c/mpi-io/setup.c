@@ -189,3 +189,75 @@ void finalize(field *temperature1, field *temperature2)
     free_2d(temperature2->data);
 }
 
+
+void write_restart(field *temperature, parallel_data *parallel, int iter)
+{
+  MPI_File fh;
+  MPI_Offset offset;
+  int my_id;
+  
+  MPI_Comm_rank(MPI_COMM_WORLD,&my_id);
+  
+  MPI_File_open(MPI_COMM_WORLD,"HEAT_RESTART.dat",
+		MPI_MODE_WRONLY|MPI_MODE_CREATE,MPI_INFO_NULL,&fh);
+  if(my_id == 0)
+    {
+      offset = 0;
+      MPI_File_write_at(fh,offset,&iter,1,MPI_INT,MPI_STATUS_IGNORE);
+      offset += sizeof(int);
+      MPI_File_write_at(fh,offset,&temperature->nx,1,MPI_INT,MPI_STATUS_IGNORE);
+      offset += sizeof(int);
+      MPI_File_write_at(fh,offset,&temperature->ny,1,MPI_INT,MPI_STATUS_IGNORE);
+      offset += sizeof(int);
+      MPI_File_write_at(fh,offset,&temperature->nx_full,1,MPI_INT,MPI_STATUS_IGNORE);
+      offset += sizeof(int);
+      MPI_File_write_at(fh,offset,&temperature->ny_full,1,MPI_INT,MPI_STATUS_IGNORE);
+      offset += sizeof(int);
+      MPI_File_write_at(fh,offset,&temperature->dx,1,MPI_INT,MPI_STATUS_IGNORE);
+      offset += sizeof(double);
+      MPI_File_write_at(fh,offset,&temperature->dy,1,MPI_INT,MPI_STATUS_IGNORE);
+      offset += sizeof(double);
+    }
+  
+  MPI_File_write_at_all(fh,offset,&temperature->data[0],
+			temperature->nx*temperature->ny,MPI_DOUBLE,
+			MPI_STATUS_IGNORE);
+}
+
+
+void read_restart(field *temperature, parallel_data *parallel, int *iter)
+{
+  MPI_File fh;
+  MPI_Offset offset;
+  int my_id;
+  
+  MPI_Comm_rank(MPI_COMM_WORLD,&my_id);
+
+  MPI_File_open(MPI_COMM_WORLD,"HEAT_RESTART.dat",
+		MPI_MODE_RDONLY,MPI_INFO_NULL,&fh);
+
+  if(my_id == 0)
+    {
+      offset = 0;
+      MPI_File_read_at(fh,offset,&iter,1,MPI_INT,MPI_STATUS_IGNORE);
+      offset += sizeof(int);
+      MPI_File_read_at(fh,offset,&temperature->nx,1,MPI_INT,MPI_STATUS_IGNORE);
+      offset += sizeof(int);
+      MPI_File_read_at(fh,offset,&temperature->ny,1,MPI_INT,MPI_STATUS_IGNORE);
+      offset += sizeof(int);
+      MPI_File_read_at(fh,offset,&temperature->nx_full,1,MPI_INT,MPI_STATUS_IGNORE);
+      offset += sizeof(int);
+      MPI_File_read_at(fh,offset,&temperature->ny_full,1,MPI_INT,MPI_STATUS_IGNORE);
+      offset += sizeof(int);
+      MPI_File_read_at(fh,offset,&temperature->dx,1,MPI_INT,MPI_STATUS_IGNORE);
+      offset += sizeof(double);
+      MPI_File_read_at(fh,offset,&temperature->dy,1,MPI_INT,MPI_STATUS_IGNORE);
+      offset += sizeof(double);
+    }
+  MPI_File_read_at_all(fh,offset,&temperature->data[0],
+		       temperature->nx*temperature->ny,MPI_DOUBLE,
+			MPI_STATUS_IGNORE);
+
+
+}
+

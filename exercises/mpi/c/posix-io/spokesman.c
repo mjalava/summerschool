@@ -51,6 +51,7 @@ void single_writer(int my_id, int *localvector, int localsize)
     FILE *fp;
     int *fullvector;
     int i, ntasks;
+    char *fname = "singlewriter.dat";
 
     MPI_Comm_size(MPI_COMM_WORLD, &ntasks);
 
@@ -76,7 +77,7 @@ void single_writer(int my_id, int *localvector, int localsize)
 
     if(my_id == WRITER_ID)
       {
-	fp = fopen("outfile","w");
+	fp = fopen(fname,"w");
 	for(i = 0; i < DATASIZE; i++)
 	  {
 	    fprintf(fp,"%d %d\n",i,fullvector[i]);

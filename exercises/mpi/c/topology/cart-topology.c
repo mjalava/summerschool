@@ -35,13 +35,14 @@ int main(int argc, char* argv[]) {
     }
 
     /* Create the 2D Cartesian communicator */
-    /* TO DO */
+    MPI_Cart_create(MPI_COMM_WORLD,2,dims,period,1,&comm2d);
 
     /* Find out and store the neighboring ranks */
-    /* TO DO */
+    MPI_Cart_shift(comm2d,0,1,&neighbors[0],&neighbors[1]);
+    MPI_Cart_shift(comm2d,1,1,&neighbors[2],&neighbors[3]);
 
     /* Find out and store also the Cartesian coordinates of a rank */
-    /* TO DO */
+    MPI_Cart_coords(comm2d, my_id, 2, coords);
 
     for (irank = 0; irank < ntasks; irank++) {
         if (my_id == irank) {

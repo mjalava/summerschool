@@ -47,11 +47,51 @@ int main(int argc, char *argv[])
 void single_reader(int my_id, int *localvector, int localsize)
 {
     FILE *fp;
-    int *fullvector, nread;
+    int *fullvector, nread,ntasks,i;
     char *fname = "singlewriter.dat";
+    
 
     /* TODO: Implement a function that will read the data from a file so that
        a single process does the file io. Use rank WRITER_ID as the io rank */
+
+    MPI_Comm_size(MPI_COMM_WORLD, &ntasks);
+
+
+    if(my_id == WRITER_ID)
+      {
+	printf("Writer\n");
+	fullvector = (int *) malloc(DATASIZE * sizeof(int));
+	fp = fopen(fname,"r");
+	for(i = 0; i < DATASIZE; i++)
+	  {
+	    fscanf(fp,"%d\n",i,&fullvector[i]);
+	    printf("Read in %d\n",fullvector[i]);
+	  }
+
+	for(i = WRITER_ID*localsize; i < (WRITER_ID+1)*localsize; i++)
+	  localvector[i] = fullvector[WRITER_ID*localsize+1];
+      }
+
+
+    for(i = 0; i < ntasks; i++)
+      {
+	if(i != WRITER_ID && my_id == WRITER_ID)
+	  MPI_Send(fullvector + i * localsize,localsize,MPI_INT,i,99,
+		   MPI_COMM_WORLD);
+	else if(i != WRITER_ID && my_id == i)
+	  MPI_Recv(localvector,localsize,MPI_INT,WRITER_ID,99,
+		   MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+
+
+      }
+
+
+
+    /* TODO: Implement a function that will write the data to file so that
+       a single process does the file io. Use rank WRITER_ID as the io rank */
+    
+    if(my_id == WRITER_ID)
+
 
     free(fullvector);
 }
